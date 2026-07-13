@@ -28,7 +28,7 @@ sudo apt-get install libncursesw5-dev
 
 With ```make``` you compile the programs
 
-With ```make clean``` you clean the compiled 
+With ```make clean``` you clean the compiled files
 
 To add your own short programs, [check out the Ncurses library](https://directory.fsf.org/wiki/Ncurses)
 
