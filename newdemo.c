@@ -372,6 +372,7 @@ int main(int argc GCC_UNUSED, char *argv[]GCC_UNUSED)
 	wrefresh(win);
 
 	BouncingBalls(win);
+		
 	// Put a message up wait for a key 
 	i = height - 2;
 	use_colors(win, 5, A_NORMAL);
