@@ -209,7 +209,7 @@ static int BouncingBalls(WINDOW *win)
 }
 
 
-// Main driver
+/* -- Main driver -- */
 int main(int argc GCC_UNUSED, char *argv[]GCC_UNUSED)
 {
     WINDOW *win;
@@ -327,11 +327,8 @@ int main(int argc GCC_UNUSED, char *argv[]GCC_UNUSED)
 			break;
 	    }
 		if (i++ >= w) {
-   			// Shift message left by one character 
-    		for (k = 0; buffer[k + 1] != '\0'; k++) {
-        		buffer[k] = buffer[k + 1];
-    		}
-		}	
+		for (k = 0; (buffer[k] = buffer[k + 1]) != '\0'; k++) ;
+	    }
 		
 		delay_output(100);
 	}
