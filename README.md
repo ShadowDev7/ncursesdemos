@@ -26,7 +26,7 @@ You are required to install the package ```libncursesw5-dev```, you can use this
 sudo apt-get install libncursesw5-dev
 ```
 
-With ```make`` you compile the programs
+With ```make``` you compile the programs
 
 With ```make clean``` you clean the compiled 
 
