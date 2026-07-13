@@ -10,6 +10,6 @@ sudo apt-get install libncursesw5-dev
 
 Με make ```clean``` καθαρίζουμε τα μεταγλωττισμένα.
 
-Για να βάλετε και εσείς σύντομα προγράμματα, (http://directory.fsf.org/wiki/Ncurses)[δείτε το πακέτο Ncurses] (hyperlink)
+Για να βάλετε και εσείς σύντομα προγράμματα, [δείτε το πακέτο Ncurses](http://directory.fsf.org/wiki/Ncurses)
 
 Το newdemo προέρχεται από τον υποκατάλογο test/ του παραπάνω πακέτου.
