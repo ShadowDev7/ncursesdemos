@@ -41,7 +41,7 @@ static const char *AusMap[16] =
 /*
  *  Funny messages
  */
-#define NMESSAGES   6
+#define NMESSAGES  6
 
 static const char *messages[] =
 {
@@ -57,8 +57,7 @@ static const char *messages[] =
 /*
  *  Trap interrupt
  */
-static void
-trap(int sig GCC_UNUSED)
+static void trap(int sig GCC_UNUSED)
 {
     endwin();
     exit(-1);
@@ -67,8 +66,7 @@ trap(int sig GCC_UNUSED)
 /*
  *  Wait for user
  */
-static int
-WaitForUser(WINDOW *win)
+static int WaitForUser(WINDOW *win)
 {
     time_t t;
     chtype key;
@@ -76,35 +74,31 @@ WaitForUser(WINDOW *win)
     nodelay(win, TRUE);
     t = time((time_t *) 0);
     while (1) {
-	if ((int) (key = (chtype) wgetch(win)) != ERR) {
-	    if (key == 'q' || key == 'Q')
-		return 1;
-	    else
-		return 0;
-	}
-	if (time((time_t *) 0) - t > 5)
-	    return 0;
+		if ((key = (chtype)wgetch(win)) != ERR) {
+    		return (key == 'q' || key == 'Q');
+			// Since the expression key == 'q' || key == 'Q' evaluates to true or false, it converts to 1 or 0 when returned as an int.
+		}
+		if (time((time_t *) 0) - t > 5)
+		    return 0;
     }
 }
 
-static void
-set_colors(WINDOW *win, int pair, int foreground, int background)
+static void set_colors(WINDOW *win, int pair, int foreground, int background)
 {
     if (has_colors()) {
-	if (pair > COLOR_PAIRS)
-	    pair = COLOR_PAIRS;
+		if (pair > COLOR_PAIRS)
+	    	pair = COLOR_PAIRS;
 	init_pair((short) pair, (short) foreground, (short) background);
 	(void) wattrset(win, (attr_t) COLOR_PAIR(pair));
     }
 }
 
-static chtype
-use_colors(WINDOW *win, int pair, chtype attrs)
+static chtype use_colors(WINDOW *win, int pair, chtype attrs)
 {
     if (has_colors()) {
-	if (pair > COLOR_PAIRS)
-	    pair = COLOR_PAIRS;
-	attrs |= (chtype) COLOR_PAIR(pair);
+		if (pair > COLOR_PAIRS)
+		    pair = COLOR_PAIRS;
+		attrs |= (chtype) COLOR_PAIR(pair);
     }
     (void) wattrset(win, attrs);
     return attrs;
@@ -113,8 +107,7 @@ use_colors(WINDOW *win, int pair, chtype attrs)
 /*
  * Test sub windows
  */
-static int
-SubWinTest(WINDOW *win)
+static int SubWinTest(WINDOW *win)
 {
     int w, h, sw, sh, bx, by;
     WINDOW *swin1, *swin2, *swin3;
@@ -123,12 +116,13 @@ SubWinTest(WINDOW *win)
     getbegyx(win, by, bx);
     sw = w / 3;
     sh = h / 3;
-    if ((swin1 = subwin(win, sh, sw, by + 3, bx + 5)) == NULL)
-	return 1;
+    
+	if ((swin1 = subwin(win, sh, sw, by + 3, bx + 5)) == NULL)
+		return 1;
     if ((swin2 = subwin(win, sh, sw, by + 4, bx + 8)) == NULL)
-	return 1;
+		return 1;
     if ((swin3 = subwin(win, sh, sw, by + 5, bx + 11)) == NULL)
-	return 1;
+		return 1;
 
     set_colors(swin1, 8, COLOR_RED, COLOR_BLUE);
     werase(swin1);
@@ -152,23 +146,23 @@ SubWinTest(WINDOW *win)
     return 0;
 }
 
-static int
-bounce(int n, int *dir, int len)
+static int bounce(int n, int *dir, int len)
 {
-    if (*dir > 0)
-	++n;
-    else
-	--n;
-    if (n <= 1 || n >= len - 2)
-	*dir = *dir ? 0 : 1;
-    return n;
+	if (*dir > 0) {
+		++n;
+	} else {
+		--n;
+	}
+	if (n <=1 || n >= len - 2)
+		*dir = *dir ? 0 : 1;
+
+	return n;
 }
 
 /*
  *  Bouncing balls
  */
-static int
-BouncingBalls(WINDOW *win)
+static int BouncingBalls(WINDOW *win)
 {
     int w, h;
     int x1, y1, xd1, yd1;
@@ -194,34 +188,33 @@ BouncingBalls(WINDOW *win)
     nodelay(win, TRUE);
 
     while (wgetch(win) == ERR) {
-	x1 = bounce(x1, &xd1, w);
-	y1 = bounce(y1, &yd1, h);
-	x2 = bounce(x2, &xd2, w);
-	y2 = bounce(y2, &yd2, h);
-	x3 = bounce(x3, &xd3, w);
-	y3 = bounce(y3, &yd3, h);
-
-	set_colors(win, 11, COLOR_RED, COLOR_BLUE);
-	mvwaddch(win, y1, x1, 'O');
-
-	set_colors(win, 12, COLOR_BLUE, COLOR_RED);
-	mvwaddch(win, y2, x2, '*');
-
-	set_colors(win, 13, COLOR_YELLOW, COLOR_WHITE);
-	mvwaddch(win, y3, x3, '@');
-
-	wmove(win, 0, 0);
-	wrefresh(win);
-	delay_output(100);
-    }
+		x1 = bounce(x1, &xd1, w);
+		y1 = bounce(y1, &yd1, h);
+		x2 = bounce(x2, &xd2, w);
+		y2 = bounce(y2, &yd2, h);
+		x3 = bounce(x3, &xd3, w);
+		y3 = bounce(y3, &yd3, h);
+	
+		set_colors(win, 11, COLOR_RED, COLOR_BLUE);
+		mvwaddch(win, y1, x1, 'O');
+	
+		set_colors(win, 12, COLOR_BLUE, COLOR_RED);
+		mvwaddch(win, y2, x2, '*');
+	
+		set_colors(win, 13, COLOR_YELLOW, COLOR_WHITE);
+		mvwaddch(win, y3, x3, '@');
+	
+		wmove(win, 0, 0);
+		wrefresh(win);
+		delay_output(100);
+	}
     return 0;
 }
 
 /*
  *  Main driver
  */
-int
-main(int argc GCC_UNUSED, char *argv[]GCC_UNUSED)
+int main(int argc GCC_UNUSED, char *argv[]GCC_UNUSED)
 {
     WINDOW *win;
     int w, x, y, i, j, k;
@@ -236,40 +229,48 @@ main(int argc GCC_UNUSED, char *argv[]GCC_UNUSED)
     CATCHALL(trap);
 
     initscr();
-    if (has_colors())
-	start_color();
-    cbreak();
-    curs_set(0);
-    width = 48;
-    height = 14;		/* Create a drawing window */
-    win = newwin(height, width, (LINES - height) / 2, (COLS - width) / 2);
-    if (win == NULL) {
-	endwin();
-	exit(-1);
+    
+	if (has_colors()) {
+    	start_color();
+	}	
+	cbreak();
+	curs_set(0);
+		
+		width = 48;
+		height = 14; /* Create a drawing window */
+		
+		win = newwin(height, width,
+		             (LINES - height) / 2,
+		             (COLS - width) / 2);
+	
+	if (win == NULL) {
+		endwin();
+		exit(-1);
     }
 
     while (1) {
-	set_colors(win, 1, COLOR_WHITE, COLOR_BLUE);
-	werase(win);
+		set_colors(win, 1, COLOR_WHITE, COLOR_BLUE);
+		werase(win);
 
-	set_colors(win, 2, COLOR_RED, COLOR_RED);
-	box(win, ACS_VLINE, ACS_HLINE);
-	wrefresh(win);
-	/* Do ramdom output of a character */
-	use_colors(win, 1, A_NORMAL);
-	c = 'a';
-	for (i = 0; i < 5000; ++i) {
-	    x = rand() % (width - 2) + 1;
-	    y = rand() % (height - 2) + 1;
-	    mvwaddch(win, y, x, c);
-	    wrefresh(win);
-	    nodelay(win, TRUE);
-	    if (wgetch(win) != ERR)
-		break;
-	    if (i == 2000) {
-		c = 'b';
-		set_colors(win, 3, COLOR_CYAN, COLOR_YELLOW);
-	    }
+		set_colors(win, 2, COLOR_RED, COLOR_RED);
+		box(win, ACS_VLINE, ACS_HLINE);
+		wrefresh(win);
+		// Do ramdom output of a character 
+		use_colors(win, 1, A_NORMAL);
+		c = 'a';
+		for (i = 0; i < 5000; ++i) {
+	    		x = rand() % (width - 2) + 1;
+	    		y = rand() % (height - 2) + 1;
+	    		mvwaddch(win, y, x, c);
+	    		wrefresh(win);
+	    		nodelay(win, TRUE);
+	    		if (wgetch(win) != ERR) {
+					break;
+				}
+	    	if (i == 2000) {
+				c = 'b';
+				set_colors(win, 3, COLOR_CYAN, COLOR_YELLOW);
+	    	}
 	}
 
 	SubWinTest(win);
@@ -305,25 +306,29 @@ main(int argc GCC_UNUSED, char *argv[]GCC_UNUSED)
 	strcpy(buffer, message);
 	while (j < NMESSAGES) {
 	    while ((int) strlen(buffer) < w) {
-		strcat(buffer, " ... ");
-		strcat(buffer, messages[++j % NMESSAGES]);
+			strcat(buffer, " ... ");
+			strcat(buffer, messages[++j % NMESSAGES]);
 	    }
 
-	    if (i < w)
-		(void) mvwaddnstr(win, height / 2, w - i, buffer, i);
-	    else
-		(void) mvwaddnstr(win, height / 2, 1, buffer, w);
-
+	    if (i < w) {
+			(void) mvwaddnstr(win, height / 2, w - i, buffer, i);
+		} else {
+			(void) mvwaddnstr(win, height / 2, 1, buffer, w);
+		}
+		
 	    wrefresh(win);
 	    nodelay(win, TRUE);
 	    if (wgetch(win) != ERR) {
-		flushinp();
-		break;
+			flushinp();
+			break;
 	    }
-	    if (i++ >= w) {
-		for (k = 0; (buffer[k] = buffer[k + 1]) != '\0'; k++) ;
-	    }
-	    delay_output(100);
+		if (i++ >= w) {
+   			/* Shift message left by one character */
+    		for (k = 0; buffer[k + 1] != '\0'; k++) {
+        		buffer[k] = buffer[k + 1];
+    			}
+			}	
+		delay_output(100);
 	}
 
 	j = 0;
@@ -331,9 +336,10 @@ main(int argc GCC_UNUSED, char *argv[]GCC_UNUSED)
 	set_colors(win, 7, COLOR_RED, COLOR_GREEN);
 	memset(save, ' ', sizeof(save));
 	for (i = 2; i < width - 4; ++i) {
-	    k = (int) mvwinch(win, 4, i);
-	    if (k == ERR)
-		break;
+	    	k = (int) mvwinch(win, 4, i);
+	    	if (k == ERR) {
+				break;
+			}
 	    save[j++] = c = (chtype) k;
 	    c &= A_CHARTEXT;
 	    mvwaddch(win, 4, i, c);
